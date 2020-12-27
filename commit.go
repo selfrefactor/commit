@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 )
 
@@ -12,17 +14,19 @@ func main() {
 	var commitMessage string
 
 	fmt.Println("Commit mode")
-	fmt.Println("\nfeat | fix | support | test | service | docs\n")
+	fmt.Printf("\nfeat | fix | support | test | service | docs\n\n")
 	fmt.Scanln(&commitMode)
 
 	fmt.Println("Commit tag?(optional)")
-	fmt.Println("\nrefactor | style | important | small | etc.\n")
+	fmt.Printf("\nrefactor | style | important | small | etc.\n\n")
 	fmt.Scanln(&commitTag)
 
-	fmt.Println("Commit message?\n")
-	fmt.Scanln(&commitMessage)
-
-	fmt.Print(commitMode + " " + commitTag + " " + commitMessage)
+	fmt.Println("Commit message?")
+	scanner := bufio.NewScanner(os.Stdin)
+	if scanner.Scan() {
+		commitMessage = scanner.Text()
+	}
+	fmt.Print(commitMode + " " + commitTag + " " + commitMessage + "|||\n")
 
 	cmd := exec.Command("run", "commit", "--mode", commitMode, "--tag", commitTag, "--message", commitMessage)
 	stdout, err := cmd.Output()
