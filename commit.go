@@ -12,15 +12,17 @@ func main() {
 	var commitMessage string
 
 	fmt.Println("Commit mode")
-	fmt.Println("\nfeat | fix | support | test | service | docs")
+	fmt.Println("\nfeat | fix | support | test | service | docs\n")
 	fmt.Scanln(&commitMode)
 
 	fmt.Println("Commit tag?(optional)")
-	fmt.Println("\nrefactor | style | important and so on")
+	fmt.Println("\nrefactor | style | important | small | etc.\n")
 	fmt.Scanln(&commitTag)
 
-	fmt.Println("Commit message?")
+	fmt.Println("Commit message?\n")
 	fmt.Scanln(&commitMessage)
+
+	fmt.Print(commitMode + " " + commitTag + " " + commitMessage)
 
 	cmd := exec.Command("run", "commit", "--mode", commitMode, "--tag", commitTag, "--message", commitMessage)
 	stdout, err := cmd.Output()
