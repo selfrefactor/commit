@@ -6,12 +6,15 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func main() {
 	var commitMode string
 	var commitTag string
+	var actualCommitTag string
 	var commitMessage string
+	var actualCommitMessage string
 
 	fmt.Println("Commit mode")
 	fmt.Printf("\nfeat | fix | service | chore | test | docs\n\n")
@@ -28,15 +31,26 @@ func main() {
 	if commitTagScanner.Scan() {
 		commitTag = commitTagScanner.Text()
 	}
+	canStop := strings.Contains(commitTag, " ")
 	fmt.Println("Commit message?")
 
-	commitMessageScanner := bufio.NewScanner(os.Stdin)
-	if commitMessageScanner.Scan() {
-		commitMessage = commitMessageScanner.Text()
+	if !canStop {
+		commitMessageScanner := bufio.NewScanner(os.Stdin)
+		if commitMessageScanner.Scan() {
+			commitMessage = commitMessageScanner.Text()
+		}
 	}
-	fmt.Print(commitMode + " " + commitTag + " " + commitMessage + "|\n")
-	return
-	cmd := exec.Command("run", "commit", "--mode", commitMode, "--tag", commitTag, "--message", commitMessage)
+	fmt.Print(commitMode + " " + commitTag + " " + commitMessage + "\n")
+
+	if canStop {
+		actualCommitMessage = commitTag
+		actualCommitTag = "SKIP"
+	} else {
+		actualCommitMessage = commitMessage
+		actualCommitTag = commitTag
+	}
+
+	cmd := exec.Command("run", "commit", "--mode", commitMode, "--tag", actualCommitTag, "--message", actualCommitMessage)
 	stdout, err := cmd.Output()
 	fmt.Print(string(stdout))
 
