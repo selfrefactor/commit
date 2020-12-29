@@ -40,7 +40,7 @@ func main() {
 			commitMessage = commitMessageScanner.Text()
 		}
 	}
-	fmt.Print(commitMode + " " + commitTag + " " + commitMessage + "\n")
+	fmt.Print("Processing ...\n")
 
 	if canStop {
 		actualCommitMessage = commitTag
