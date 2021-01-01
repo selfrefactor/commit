@@ -32,9 +32,9 @@ func main() {
 		commitTag = commitTagScanner.Text()
 	}
 	canStop := strings.Contains(commitTag, " ")
-	fmt.Println("Commit message?")
 
 	if !canStop {
+		fmt.Println("Commit message?")
 		commitMessageScanner := bufio.NewScanner(os.Stdin)
 		if commitMessageScanner.Scan() {
 			commitMessage = commitMessageScanner.Text()
